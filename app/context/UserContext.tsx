@@ -4,7 +4,7 @@ import type { User, UserContextType } from '../types';
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>([]);
 
   const login = (userData: User) => setUser(userData);
   const logout = () => setUser(null);
