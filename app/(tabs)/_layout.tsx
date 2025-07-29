@@ -1,36 +1,34 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { COLORS } from '../../constants/Colors';
 
-function CenterTabIcon({ focused }: { focused: boolean }) {
-  return (
-    <View style={[styles.centerTab, focused && styles.centerTabFocused]}>
-      <MaterialCommunityIcons
-        name="qrcode-scan"
-        size={28}
-        color={focused ? '#000' : '#FFA500'}
-      />
-    </View>
-  );
-}
+const homeActive = require('../../assets/images/home-active.png');
+const homeInactive = require('../../assets/images/home-inactive.png');
+const challengesIconActive = require('../../assets/images/prize-active.png');
+const challengesIconInActive = require('../../assets/images/prize-inactive.png');
+const rewardsIconActive = require('../../assets/images/rewards-active.png');
+const rewardsIconInActive = require('../../assets/images/rewards-inactive.png');
+const scannerIcon = require('../../assets/images/scanner.png');
+const profileIconActive = require('../../assets/images/profile-active.png');
+const profileIconInActive = require('../../assets/images/profile-inactive.png');
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#FFA500', // Orange color from design
-        tabBarInactiveTintColor: '#666',
+        tabBarActiveTintColor: COLORS.primary, // Orange color from design
+        tabBarInactiveTintColor: COLORS.inputPlaceHolder,
         tabBarStyle: {
-          backgroundColor: '#000', // Black background like in design
+          backgroundColor: COLORS.darkBackground, // Black background like in design
           borderTopWidth: 0,
-          height: 80,
-          paddingBottom: 20,
-          paddingTop: 10,
+          height: 95,
+          paddingBottom: 10,
+          paddingTop: 20,
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
           position: 'absolute',
-          shadowColor: '#000',
+          shadowColor: COLORS.darkBackground,
           shadowOffset: { width: 0, height: -2 },
           shadowOpacity: 0.1,
           shadowRadius: 8,
@@ -53,11 +51,7 @@ export default function TabLayout() {
           title: 'Home',
           tabBarIcon: ({ color, focused, size }) => (
             <View style={[styles.tabIconContainer, focused && styles.activeTabContainer]}>
-              <Ionicons
-                name={focused ? "home" : "home-outline"}
-                size={22}
-                color={focused ? '#FFA500' : '#666'}
-              />
+              <Image source={focused ? homeActive : homeInactive} style={styles.tabIcon} />
             </View>
           ),
         }}
@@ -68,11 +62,7 @@ export default function TabLayout() {
           title: 'Challenges',
           tabBarIcon: ({ color, focused, size }) => (
             <View style={[styles.tabIconContainer, focused && styles.activeTabContainer]}>
-              <Ionicons
-                name={focused ? "trophy" : "trophy-outline"}
-                size={22}
-                color={focused ? '#FFA500' : '#666'}
-              />
+              <Image source={focused ? challengesIconActive : challengesIconInActive} style={styles.tabIcon} />
             </View>
           ),
         }}
@@ -83,11 +73,7 @@ export default function TabLayout() {
           title: '',
           tabBarIcon: ({ color, focused, size }) => (
             <View style={[styles.tabIconContainer, focused && styles.activeTabContainer]}>
-              <MaterialCommunityIcons
-                name="qrcode-scan"
-                size={28}
-                color={focused ? '#000' : '#FFA500'}
-              />
+              <Image source={scannerIcon} style={styles.scanIcon} />
             </View>
           ),
           tabBarLabel: () => null,
@@ -99,11 +85,7 @@ export default function TabLayout() {
           title: 'Rewards',
           tabBarIcon: ({ color, focused, size }) => (
             <View style={[styles.tabIconContainer, focused && styles.activeTabContainer]}>
-              <Ionicons
-                name={focused ? "gift" : "gift-outline"}
-                size={22}
-                color={focused ? '#FFA500' : '#666'}
-              />
+              <Image source={focused ? rewardsIconActive : rewardsIconInActive} style={styles.tabIcon} />
             </View>
           ),
         }}
@@ -114,11 +96,7 @@ export default function TabLayout() {
           title: 'Profile',
           tabBarIcon: ({ color, focused, size }) => (
             <View style={[styles.tabIconContainer, focused && styles.activeTabContainer]}>
-              <Ionicons
-                name={focused ? "person" : "person-outline"}
-                size={22}
-                color={focused ? '#FFA500' : '#666'}
-              />
+              <Image source={focused ? profileIconActive : profileIconInActive} style={styles.tabIcon} />
             </View>
           ),
         }}
@@ -128,32 +106,21 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  centerTab: {
-    backgroundColor: '#FFA500', // Orange background
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 25,
-    shadowColor: '#FFA500',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  centerTabFocused: {
-    backgroundColor: '#FFA500',
-    transform: [{ scale: 1.1 }],
-  },
   tabIconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
   },
   activeTabContainer: {
-    backgroundColor: 'rgba(255, 165, 0, 0.1)', // Subtle orange glow for active state
+    backgroundColor: COLORS.darkBackground,
   },
+  tabIcon: {
+    width: 24,
+    height: 24,
+  },
+  scanIcon: {
+    width: 74,
+    height: 52,
+    resizeMode: 'contain',
+    transform: [{ translateY: 10 }],
+  }
 });

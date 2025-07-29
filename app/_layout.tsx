@@ -1,21 +1,27 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
-import React from 'react';
+import * as SystemUI from 'expo-system-ui';
+import React, { useEffect } from 'react';
 import {
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
   StyleSheet,
-  TouchableWithoutFeedback,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
+import { COLORS } from '../constants/Colors';
 import { UserProvider, useUser } from './context/UserContext';
 
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+
+  useEffect(() => {
+    SystemUI.setBackgroundColorAsync(COLORS.darkBackground);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
@@ -25,11 +31,14 @@ export default function RootLayout() {
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
           >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={styles.flex}>
-                <ConditionalNavigation />
-              </View>
-            </TouchableWithoutFeedback>
+            <StatusBar
+              backgroundColor={COLORS.darkBackground} // Android
+              barStyle="light-content" // iOS
+              translucent={false}
+            />
+            <View style={styles.flex}>
+              <ConditionalNavigation />
+            </View>
           </KeyboardAvoidingView>
         </SafeAreaView>
         <Toast />
