@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FlatList,
   Image,
@@ -14,6 +14,7 @@ import Toast from 'react-native-toast-message';
 import { COLORS } from '../../constants/Colors';
 import { fetchExample, login, setAuthToken } from '../api';
 import { useUser } from '../context/UserContext';
+import NotificationScreen from '../NotificationScreen';
 
 const notificationIcon = require('../../assets/images/notification-light.png');
 const fire = require('../../assets/images/fire.png');
@@ -29,6 +30,7 @@ const profileSample = require('../../assets/images/profile-sample.jpg');
 const HomeScreen = () => {
   const { user, login: setUser, addXP, addReward } = useUser();
   const queryClient = useQueryClient();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['example'],
@@ -58,6 +60,15 @@ const HomeScreen = () => {
     addReward(1);
     Toast.show({ type: 'success', text1: 'Reward Gained', text2: '+1 Reward!' });
   };
+
+   const handleNotificationPress = () => {
+    setShowNotifications(true);
+  };
+
+  const handleCloseNotifications = () => {
+    setShowNotifications(false);
+  };
+
 
   // Static data
   const staticUser = {
@@ -151,7 +162,7 @@ const HomeScreen = () => {
                 <Text style={styles.nameText}>{staticUser.name}</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.notificationIcon}>
+            <TouchableOpacity style={styles.notificationIcon} onPress={handleNotificationPress}>
               <Image source={notificationIcon} style={styles.notificationImage} />
             </TouchableOpacity>
           </View>
@@ -288,6 +299,12 @@ const HomeScreen = () => {
             </View>
           </View>
         </View>
+
+           {/* Notification Modal */}
+      <NotificationScreen 
+        visible={showNotifications}
+        onClose={handleCloseNotifications}
+      />
       </ScrollView>
     </SafeAreaView>
   );

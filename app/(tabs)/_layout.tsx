@@ -22,9 +22,9 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: COLORS.darkBackground, // Black background like in design
           borderTopWidth: 0,
-          height: 95,
+          height: 85,
           paddingBottom: 10,
-          paddingTop: 20,
+          paddingTop: 10,
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
           position: 'absolute',

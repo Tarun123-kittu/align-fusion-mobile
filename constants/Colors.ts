@@ -23,6 +23,10 @@ export const COLORS = {
   disabled: "#ACB5BB",
   tabsDarkBackground: "#131417",
 
+  inProgressTabColor: "#D1701C",
+
+  lighRedBackground: "#fdede9",
+
   grayBackground: "#e3e3e3",
   grayText: "#7d7d7d",
 
