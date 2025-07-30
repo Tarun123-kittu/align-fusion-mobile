@@ -57,6 +57,7 @@ function ConditionalNavigation() {
         <>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="NotificationScreen" />
+          <Stack.Screen name="CheckInHistory" />
         </>
 
       ) : (

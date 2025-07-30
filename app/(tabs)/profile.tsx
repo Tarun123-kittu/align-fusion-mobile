@@ -1,15 +1,20 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { COLORS } from '../..//constants/Colors';
 
 const ProfileScreen = () => {
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Profile Screen</Text>
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/profile/edit-profile')}>
-        <Text style={styles.buttonText}>Edit Profile</Text>
-      </TouchableOpacity>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+
+        <View style={styles.darkSection}>
+        </View>
+
+        <View style={styles.lightSection}>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -17,26 +22,27 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#111827',
+    backgroundColor: COLORS.darkBackground,
+    paddingBottom: 80,
   },
-  text: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 24,
+  scrollView: {
+    flex: 1,
   },
-  button: {
-    backgroundColor: '#EAB308',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
+
+  // White Section Styles
+  lightSection: {
+    backgroundColor: COLORS.lightBackground,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    // marginTop: -10,
+    paddingTop: 24,
+    paddingHorizontal: 20,
+    minHeight: 650,
   },
-  buttonText: {
-    color: '#111827',
-    fontWeight: 'bold',
-    fontSize: 16,
+  darkSection: {
+    backgroundColor: COLORS.darkBackground,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
 });
 

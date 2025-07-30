@@ -22,11 +22,8 @@ interface NotificationData {
     time: string;
 }
 
-interface NotificationScreenProps {
 
-}
-
-const NotificationScreen: React.FC<NotificationScreenProps> = () => {
+const NotificationScreen = () => {
 
     const notificationData: NotificationData[] = [
         {

@@ -1,80 +1,67 @@
-import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../constants/Colors';
 
-interface HeaderProps {
-  greeting: string;
-  username: string;
-  profileImage?: string;
-  onProfilePress?: () => void;
-  onNotificationPress?: () => void;
+const notificationIcon = require('../assets/images/notification-light.png');
+const profileSample = require('../assets/images/profile-sample.jpg');
+
+interface Props {
+  name: string;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  greeting,
-  username,
-  profileImage,
-  onProfilePress,
-  onNotificationPress,
-}) => {
+const Header: React.FC<Props> = ({ name }) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onProfilePress} style={styles.profileContainer}>
-        {profileImage ? (
-          <Image source={{ uri: profileImage }} style={styles.profileImage} />
-        ) : (
-          <Ionicons name="person-circle" size={40} color={COLORS.primary} />
-        )}
-      </TouchableOpacity>
-      <View style={styles.textContainer}>
-        <Text style={styles.greeting}>{greeting}</Text>
-        <Text style={styles.username}>{username}</Text>
+    <View style={styles.header}>
+      <View style={styles.profileSection}>
+        <Image source={profileSample} style={styles.profileImage} />
+        <View style={styles.profileInfo}>
+          <Text style={styles.greetingText}>Good Morning,</Text>
+          <Text style={styles.nameText}>{name}</Text>
+        </View>
       </View>
-      <TouchableOpacity onPress={onNotificationPress} style={styles.bellContainer}>
-        <Ionicons name="notifications-outline" size={28} color={COLORS.primary} />
+      <TouchableOpacity style={styles.notificationIcon} onPress={() => router.push('/NotificationScreen')}>
+        <Image source={notificationIcon} style={styles.notificationImage} />
       </TouchableOpacity>
     </View>
   );
 };
 
+export default Header;
+
 const styles = StyleSheet.create({
-  container: {
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  profileSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    paddingBottom: 12,
-    backgroundColor: '#fff',
-  },
-  profileContainer: {
-    marginRight: 8,
   },
   profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: COLORS.primary,
+    width: 45,
+    height: 45,
+    borderRadius: 25,
+    marginRight: 14,
   },
-  textContainer: {
-    flex: 1,
-    alignItems: 'center',
+  profileInfo: {
+    gap: 4,
   },
-  greeting: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#222',
+  greetingText: {
+    color: COLORS.textWhite,
+    fontSize: 18,
+    fontWeight: '600',
   },
-  username: {
+  nameText: {
+    color: COLORS.textWhite,
     fontSize: 14,
-    color: COLORS.primary,
-    textDecorationLine: 'underline',
+    fontWeight: '400',
   },
-  bellContainer: {
-    marginLeft: 8,
+  notificationIcon: {},
+  notificationImage: {
+    width: 32,
+    height: 32,
   },
 });
-
-export default Header; 

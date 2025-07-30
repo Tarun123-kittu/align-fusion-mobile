@@ -12,11 +12,11 @@ import {
   View
 } from 'react-native';
 import Toast from 'react-native-toast-message';
+import Header from '../../components/Header';
 import { COLORS } from '../../constants/Colors';
 import { fetchExample, login, setAuthToken } from '../api';
 import { useUser } from '../context/UserContext';
 
-const notificationIcon = require('../../assets/images/notification-light.png');
 const fire = require('../../assets/images/fire.png');
 const ranking = require('../../assets/images/ranking.png');
 const task = require('../../assets/images/task.png');
@@ -154,18 +154,7 @@ const HomeScreen = () => {
         {/* Dark Background Section */}
         <View style={styles.darkSection}>
           {/* Header with Profile and Notification */}
-          <View style={styles.header}>
-            <View style={styles.profileSection}>
-              <Image source={profileSample} style={styles.profileImage} />
-              <View style={styles.profileInfo}>
-                <Text style={styles.greetingText}>Good Morning,</Text>
-                <Text style={styles.nameText}>{staticUser.name}</Text>
-              </View>
-            </View>
-            <TouchableOpacity style={styles.notificationIcon} onPress={() => router.push('/NotificationScreen')}>
-              <Image source={notificationIcon} style={styles.notificationImage} />
-            </TouchableOpacity>
-          </View>
+          <Header name='Kimberly Montemayor' />
 
           {/* XP Card */}
           <View style={styles.xpCard}>
@@ -270,7 +259,7 @@ const HomeScreen = () => {
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Attendance</Text>
               </View>
-              <TouchableOpacity style={styles.attendanceButton}>
+              <TouchableOpacity style={styles.attendanceButton} onPress={() => router.push('/CheckInHistory')}>
                 <Image source={calendar} style={styles.attendanceImage} />
                 <Text style={styles.attendanceButtonText}>Check-in History</Text>
               </TouchableOpacity>
