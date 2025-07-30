@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   FlatList,
@@ -14,7 +15,6 @@ import Toast from 'react-native-toast-message';
 import { COLORS } from '../../constants/Colors';
 import { fetchExample, login, setAuthToken } from '../api';
 import { useUser } from '../context/UserContext';
-import NotificationScreen from '../NotificationScreen';
 
 const notificationIcon = require('../../assets/images/notification-light.png');
 const fire = require('../../assets/images/fire.png');
@@ -162,7 +162,7 @@ const HomeScreen = () => {
                 <Text style={styles.nameText}>{staticUser.name}</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.notificationIcon} onPress={handleNotificationPress}>
+            <TouchableOpacity style={styles.notificationIcon} onPress={() => router.push('/NotificationScreen')}>
               <Image source={notificationIcon} style={styles.notificationImage} />
             </TouchableOpacity>
           </View>
@@ -299,12 +299,7 @@ const HomeScreen = () => {
             </View>
           </View>
         </View>
-
-           {/* Notification Modal */}
-      <NotificationScreen 
-        visible={showNotifications}
-        onClose={handleCloseNotifications}
-      />
+    
       </ScrollView>
     </SafeAreaView>
   );

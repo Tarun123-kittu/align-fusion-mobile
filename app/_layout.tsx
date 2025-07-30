@@ -54,7 +54,11 @@ function ConditionalNavigation() {
     <Stack screenOptions={{ headerShown: false }}>
       {user ? (
         // If signed in, show main app
-        <Stack.Screen name="(tabs)" />
+        <>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="NotificationScreen" />
+        </>
+
       ) : (
         // If not signed in, show auth flow
         <>

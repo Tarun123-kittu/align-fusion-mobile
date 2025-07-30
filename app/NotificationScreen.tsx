@@ -1,22 +1,18 @@
+import { router } from 'expo-router';
 import React from 'react';
 import {
-    Animated,
-    Dimensions,
     FlatList,
     Image,
-    Modal,
     SafeAreaView,
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
+    View
 } from 'react-native';
 import NotificationItem from '../components/NotificationItem';
 import { COLORS } from '../constants/Colors';
 
 const backButton = require('../assets/images/arrow-back.png');
-
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface NotificationData {
     id: number;
@@ -27,34 +23,10 @@ interface NotificationData {
 }
 
 interface NotificationScreenProps {
-    visible: boolean;
-    onClose: () => void;
+
 }
 
-const NotificationScreen: React.FC<NotificationScreenProps> = ({ visible, onClose }) => {
-    const slideAnim = React.useRef(new Animated.Value(SCREEN_HEIGHT)).current;
-    const [isVisible, setIsVisible] = React.useState(visible);
-
-    React.useEffect(() => {
-        if (visible) {
-            setIsVisible(true); // Show modal immediately
-            Animated.spring(slideAnim, {
-                toValue: 0,
-                useNativeDriver: true,
-                tension: 65,
-                friction: 11,
-            }).start();
-        } else {
-            Animated.timing(slideAnim, {
-                toValue: SCREEN_HEIGHT,
-                useNativeDriver: true,
-                duration: 200, // fast close
-            }).start(() => {
-                setIsVisible(false); // Actually hide modal
-            });
-        }
-    }, [visible]);
-
+const NotificationScreen: React.FC<NotificationScreenProps> = () => {
 
     const notificationData: NotificationData[] = [
         {
@@ -92,96 +64,61 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ visible, onClos
             description: 'Your OSHA 30 certification has been expire from last 15 days',
             time: '2 hours ago',
         },
+         {
+            id: 6,
+            type: 'completed',
+            title: 'Task Approved - Xp Earned',
+            description: 'Daily Equipment check assigned by John Martinez',
+            time: '2 hours ago',
+        },
     ];
 
     const renderNotificationItem = ({ item }: { item: NotificationData }) => (
         <NotificationItem item={item} />
     );
 
-    const handleClose = () => {
-        Animated.timing(slideAnim, {
-            toValue: SCREEN_HEIGHT,
-            useNativeDriver: true,
-            duration: 200,
-        }).start(() => {
-            setIsVisible(false);
-            onClose(); // Tell parent modal is closed
-        });
-    };
-
     return (
-        <Modal
-            visible={isVisible}
-            transparent={true}
-            animationType="none"
-            onRequestClose={handleClose}
-        >
-            <View style={styles.overlay}>
-                <TouchableOpacity
-                    style={styles.backdrop}
-                    activeOpacity={1}
-                    onPress={handleClose}
-                />
-
-                <Animated.View
-                    style={[
-                        styles.container,
-                        {
-                            transform: [{ translateY: slideAnim }],
-                        },
-                    ]}
-                >
-                    <SafeAreaView style={styles.safeArea}>
-                        {/* Header */}
-                        <View style={styles.header}>
-                            <TouchableOpacity onPress={handleClose} style={styles.backButton}>
-                                <Image source={backButton} style={styles.backButtonImage} />
-                            </TouchableOpacity>
-                            <Text style={styles.headerTitle}>Notifications</Text>
-                            <View style={styles.placeholder} />
-                        </View>
+        <View style={{ flex: 1, backgroundColor: COLORS.darkBackground }}>
+            <View style={[styles.container]}>
+                <SafeAreaView style={styles.safeArea}>
+                    {/* Header */}
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+                            <Image source={backButton} style={styles.backButtonImage} />
+                        </TouchableOpacity>
+                        <Text style={styles.headerTitle}>Notifications</Text>
+                        <View style={styles.placeholder} />
+                    </View>
 
 
-
-                        {/* Notification List */}
-                        <FlatList
-                            data={notificationData}
-                            keyExtractor={(item: NotificationData) => item.id.toString()}
-                            renderItem={renderNotificationItem}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={styles.listContainer}
-                            ListHeaderComponent={
-                                <View style={styles.subHeader}>
-                                    <Text style={styles.subHeaderText}>
-                                        Keep track of important updates, tasks, and approvals.
-                                    </Text>
-                                </View>
-                            }
-                        />
-                    </SafeAreaView>
-                </Animated.View>
+                    {/* Notification List */}
+                    <FlatList
+                        data={notificationData}
+                        keyExtractor={(item: NotificationData) => item.id.toString()}
+                        renderItem={renderNotificationItem}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={styles.listContainer}
+                        ListHeaderComponent={
+                            <View style={styles.subHeader}>
+                                <Text style={styles.subHeaderText}>
+                                    Keep track of important updates, tasks, and approvals.
+                                </Text>
+                            </View>
+                        }
+                    />
+                </SafeAreaView>
             </View>
-        </Modal>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    backdrop: {
-        flex: 1,
-    },
     container: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: SCREEN_HEIGHT * 0.9,
+        flex: 1,
         backgroundColor: COLORS.lightBackground,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        marginTop: 12,
     },
     safeArea: {
         flex: 1,
