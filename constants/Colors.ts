@@ -20,6 +20,7 @@ export const COLORS = {
   inputPlaceHolder: "#676D75",
   error: "#DC2626",
   buttonBackground: "#EAB308",
+  yellow: "#EAB308",
   disabled: "#ACB5BB",
   tabsDarkBackground: "#131417",
 
@@ -38,5 +39,7 @@ export const COLORS = {
   lightGreenCardTag: "#CAFFE0",
   lightCardText: "#FCB351",
   lightGreenCardText: "#48BB78",
+
+  tabsBackground: "#fef8e4",
 
 };
