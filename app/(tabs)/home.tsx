@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  FlatList,
   Image,
   SafeAreaView,
   ScrollView,
@@ -13,6 +12,7 @@ import {
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import Header from '../../components/Header';
+import Leaderboard from '../../components/Leaderboard';
 import { COLORS } from '../../constants/Colors';
 import { fetchExample, login, setAuthToken } from '../api';
 import { useUser } from '../context/UserContext';
@@ -21,16 +21,10 @@ const fire = require('../../assets/images/fire.png');
 const ranking = require('../../assets/images/ranking.png');
 const task = require('../../assets/images/task.png');
 const calendar = require('../../assets/images/calendar.png');
-const star = require('../../assets/images/star.png');
-const firstPlace = require('../../assets/images/first-place.png');
-const secondPlace = require('../../assets/images/second-place.png');
-const thirdPlace = require('../../assets/images/third-place.png');
-const profileSample = require('../../assets/images/profile-sample.jpg');
 
 const HomeScreen = () => {
   const { user, login: setUser, addXP, addReward } = useUser();
   const queryClient = useQueryClient();
-  const [showNotifications, setShowNotifications] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['example'],
@@ -50,24 +44,6 @@ const HomeScreen = () => {
       Toast.show({ type: 'error', text1: 'Login Failed', text2: err.message });
     },
   });
-
-  const handleXP = () => {
-    addXP(10);
-    Toast.show({ type: 'success', text1: 'XP Gained', text2: '+10 XP!' });
-  };
-
-  const handleReward = () => {
-    addReward(1);
-    Toast.show({ type: 'success', text1: 'Reward Gained', text2: '+1 Reward!' });
-  };
-
-   const handleNotificationPress = () => {
-    setShowNotifications(true);
-  };
-
-  const handleCloseNotifications = () => {
-    setShowNotifications(false);
-  };
 
 
   // Static data
@@ -110,43 +86,6 @@ const HomeScreen = () => {
     { id: 9, name: 'Emily R. Davis', xp: 1000, rank: 9, avatar: '👩‍🏭' },
     { id: 10, name: 'David M. Wilson', xp: 800, rank: 10, avatar: '👨‍💻' }
   ];
-
-  const renderItem = ({ item }: any) => {
-    const getRankDisplay = (rank: number) => {
-      switch (rank) {
-        case 1:
-          return <Image source={firstPlace} style={styles.rankIcon} />;
-        case 2:
-          return <Image source={secondPlace} style={styles.rankIcon} />;
-        case 3:
-          return <Image source={thirdPlace} style={styles.rankIcon} />;
-        default:
-          return (
-            <View style={styles.grayRankContainer}>
-              <Text style={styles.grayRankText}>{rank}</Text>
-            </View>
-          );
-      }
-    };
-
-    return (
-      <View style={styles.leaderboardItem}>
-        <View style={styles.rankContainer}>
-          {getRankDisplay(item.rank)}
-        </View>
-
-        <View style={styles.memberInfoContainer}>
-          <Image source={profileSample} style={styles.avatarImage} />
-          <Text style={styles.memberName}>{item.name}</Text>
-        </View>
-
-        <View style={styles.xpBadge}>
-          <Image source={star} style={styles.starIcon} />
-          <Text style={styles.xpBadgeText}>{item.xp}</Text>
-        </View>
-      </View>
-    );
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -274,17 +213,7 @@ const HomeScreen = () => {
                 </TouchableOpacity>
               </View>
 
-              <View style={styles.leaderboardContainer}>
-                <FlatList
-                  data={leaderboard}
-                  keyExtractor={(item) => item.id.toString()}
-                  renderItem={renderItem}
-                  showsVerticalScrollIndicator={true}
-                  scrollEnabled={true}
-                  nestedScrollEnabled={true}
-                  contentContainerStyle={{ paddingBottom: 10 }}
-                />
-              </View>
+                <Leaderboard data={leaderboard} height={300} scrollEnabled={true} />
             </View>
           </View>
         </View>
@@ -574,129 +503,4 @@ const styles = StyleSheet.create({
     fontWeight: 500,
   },
 
-  // Leaderboard Styles
-  leaderboardContainer: {
-    backgroundColor: COLORS.lightBackground,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.borderColor,
-    padding: 10,
-    maxHeight: 300, // Keep this for limiting height
-
-    // Light iOS Shadow
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.03,
-    shadowRadius: 3,
-
-    // Light Android Shadow
-    elevation: 1,
-  },
-  memberInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  leaderboardItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.borderColor,
-    marginBottom: 8,
-    backgroundColor: COLORS.lightBackground,
-    overflow: 'hidden',
-
-    // Very light iOS Shadow for individual items
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: 0.5,
-    },
-    shadowOpacity: 0.02,
-    shadowRadius: 2,
-
-    // Very light Android Shadow for individual items
-    elevation: 0.5,
-  },
-  rankContainer: {
-    height: 48,
-    paddingHorizontal: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  rankIcon: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  grayRankContainer: {
-    width: 30,
-    height: 30,
-    borderRadius: 16,
-    backgroundColor: COLORS.grayBackground,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  grayRankText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: COLORS.grayText,
-  },
-  memberInfoContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: COLORS.borderColor,
-    gap: 12,
-  },
-  avatarImage: {
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-  },
-  memberName: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: COLORS.black,
-  },
-  xpBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 2,
-    paddingLeft: 6,
-    paddingRight: 12,
-    paddingVertical: 11,
-  },
-  starIcon: {
-    width: 25,
-    height: 25,
-    resizeMode: 'contain',
-    marginTop: -2
-  },
-  xpBadgeText: {
-    fontSize: 14,
-    fontWeight: 400,
-    color: COLORS.black,
-  },
-  // Debug Section
-  debugSection: {
-    marginTop: 20,
-    gap: 10,
-    paddingBottom: 20,
-  },
-  text: {
-    fontSize: 16,
-    color: COLORS.black,
-    textAlign: 'center',
-    marginTop: 10,
-  },
 });
