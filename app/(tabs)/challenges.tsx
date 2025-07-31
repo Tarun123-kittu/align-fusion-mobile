@@ -9,7 +9,10 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import ActiveTaskItem from '../../components/ActiveTaskItem';
 import Header from '../../components/Header';
+import Leaderboard from '../../components/Leaderboard';
+import ReviewTaskItem from '../../components/ReviewTaskItem';
 import { COLORS } from '../../constants/Colors';
 
 const star = require('../../assets/images/star.png');
@@ -32,13 +35,14 @@ interface TaskItem {
   status: 'active' | 'completed' | 'review';
   assignedTo?: string;
   expireDate?: string;
+  theme?: 'green' | 'normal' | 'default' | 'rejected';
 }
 
 interface LeaderboardItem {
-  id: string;
+  id: number;
   name: string;
   avatar: any;
-  score: number;
+  xp: number;
   rank: number;
 }
 
@@ -59,17 +63,19 @@ const activeTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'active'
+    status: 'active',
+    theme: 'green'
   },
   {
     id: '2',
     title: 'Daily Hazard Identification',
     description: 'Complete 5 safety hazard identifications',
-    xpReward: 100,
+    xpReward: 50,
     date: '12/07/2025',
     status: 'active',
     assignedTo: 'James Wilson',
-    expireDate: '12/07/2025'
+    expireDate: '12/07/2025',
+    theme: 'normal'
   },
   {
     id: '3',
@@ -79,7 +85,8 @@ const activeTasks: TaskItem[] = [
     date: '12/07/2025',
     status: 'active',
     assignedTo: 'James Wilson',
-    expireDate: '12/07/2025'
+    expireDate: '12/07/2025',
+    theme: 'normal'
   }
 ];
 
@@ -90,7 +97,8 @@ const completedTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'completed'
+    status: 'completed',
+    theme: 'default'
   },
   {
     id: '5',
@@ -98,7 +106,8 @@ const completedTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'completed'
+    status: 'completed',
+    theme: 'default'
   },
   {
     id: '6',
@@ -106,7 +115,8 @@ const completedTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'completed'
+    status: 'completed',
+    theme: 'default'
   },
   {
     id: '7',
@@ -114,7 +124,8 @@ const completedTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'completed'
+    status: 'completed',
+    theme: 'default'
   }
 ];
 
@@ -125,7 +136,8 @@ const reviewTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'review'
+    status: 'review',
+    theme: 'default'
   },
   {
     id: '9',
@@ -133,7 +145,8 @@ const reviewTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'review'
+    status: 'review',
+    theme: 'default'
   },
   {
     id: '10',
@@ -141,7 +154,8 @@ const reviewTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'review'
+    status: 'review',
+    theme: 'rejected'
   },
   {
     id: '11',
@@ -149,21 +163,22 @@ const reviewTasks: TaskItem[] = [
     description: 'Complete today\'s safety checklist & get 100 XP',
     xpReward: 100,
     date: '01/12/2025',
-    status: 'review'
+    status: 'review',
+    theme: 'default'
   }
 ];
 
 const leaderboardData: LeaderboardItem[] = [
-  { id: '1', name: 'Paul C. Ramos', avatar: require('../../assets/images/star.png'), score: 5075, rank: 1 },
-  { id: '2', name: 'Derrick L. Thoman', avatar: require('../../assets/images/star.png'), score: 5060, rank: 2 },
-  { id: '3', name: 'Kelsey T. Donovan', avatar: require('../../assets/images/star.png'), score: 5045, rank: 3 },
-  { id: '4', name: 'Jack L. Gregory', avatar: require('../../assets/images/star.png'), score: 5001, rank: 4 },
-  { id: '5', name: 'Sarah J. Peters', avatar: require('../../assets/images/star.png'), score: 4998, rank: 5 },
-  { id: '6', name: 'Thomas A. Lee', avatar: require('../../assets/images/star.png'), score: 4975, rank: 6 },
-  { id: '7', name: 'Maria S. Gomez', avatar: require('../../assets/images/star.png'), score: 4950, rank: 7 },
-  { id: '8', name: 'Ethan R. Taylor', avatar: require('../../assets/images/star.png'), score: 4932, rank: 8 },
-  { id: '9', name: 'Mia N. Patel', avatar: require('../../assets/images/star.png'), score: 4908, rank: 9 },
-  { id: '10', name: 'Brian K. Smith', avatar: require('../../assets/images/star.png'), score: 4890, rank: 10 },
+  { id: 1, name: 'Paul C. Ramos', avatar: require('../../assets/images/star.png'), xp: 5075, rank: 1 },
+  { id: 2, name: 'Derrick L. Thoman', avatar: require('../../assets/images/star.png'), xp: 5060, rank: 2 },
+  { id: 3, name: 'Kelsey T. Donovan', avatar: require('../../assets/images/star.png'), xp: 5045, rank: 3 },
+  { id: 4, name: 'Jack L. Gregory', avatar: require('../../assets/images/star.png'), xp: 5001, rank: 4 },
+  { id: 5, name: 'Sarah J. Peters', avatar: require('../../assets/images/star.png'), xp: 4998, rank: 5 },
+  { id: 6, name: 'Thomas A. Lee', avatar: require('../../assets/images/star.png'), xp: 4975, rank: 6 },
+  { id: 7, name: 'Maria S. Gomez', avatar: require('../../assets/images/star.png'), xp: 4950, rank: 7 },
+  { id: 8, name: 'Ethan R. Taylor', avatar: require('../../assets/images/star.png'), xp: 4932, rank: 8 },
+  { id: 9, name: 'Mia N. Patel', avatar: require('../../assets/images/star.png'), xp: 4908, rank: 9 },
+  { id: 10, name: 'Brian K. Smith', avatar: require('../../assets/images/star.png'), xp: 4890, rank: 10 },
 ];
 
 // Components
@@ -179,73 +194,6 @@ const TopPerformanceItem: React.FC<{ item: TopPerformer }> = ({ item }) => (
     <View style={[styles.xpContainer]}>
       <Image source={star} style={styles.starIcon} />
       <Text style={styles.xpValue}>{item.xp} XP</Text>
-    </View>
-  </View>
-);
-
-const TaskListItem: React.FC<{ item: TaskItem; status: TabType }> = ({ item, status }) => (
-  <View style={styles.taskItem}>
-    <View style={styles.taskHeader}>
-      <View style={styles.taskCategory}>
-        <Text style={styles.taskCategoryText}>Safety</Text>
-      </View>
-      {status === 'Active' && (
-        <View style={styles.todayBadge}>
-          <Text style={styles.todayBadgeText}>TODAY</Text>
-        </View>
-      )}
-      {status === 'Completed' && (
-        <View style={styles.completedBadge}>
-          <Text style={styles.completedBadgeText}>✓</Text>
-        </View>
-      )}
-    </View>
-
-    <Text style={styles.taskTitle}>{item.title}</Text>
-    <Text style={styles.taskDescription}>{item.description}</Text>
-
-    <View style={styles.taskFooter}>
-      <View style={styles.xpReward}>
-        <Text style={styles.xpText}>XP Rewarded: </Text>
-        <View style={styles.starContainer}>
-          <Text style={styles.starIcon}>⭐</Text>
-          <Text style={styles.xpValue}>{item.xpReward}</Text>
-        </View>
-        <Text style={styles.dateText}>📅 Date: {item.date}</Text>
-      </View>
-    </View>
-
-    {item.assignedTo && (
-      <View style={styles.assignmentInfo}>
-        <Text style={styles.assignedText}>👤 Assigned To: {item.assignedTo}</Text>
-        <Text style={styles.expireText}>📅 Expire Date: {item.expireDate}</Text>
-      </View>
-    )}
-
-    {status === 'Active' && (
-      <TouchableOpacity style={styles.completeButton}>
-        <Text style={styles.completeButtonText}>Complete Task</Text>
-      </TouchableOpacity>
-    )}
-
-    {status === 'In Review' && (
-      <TouchableOpacity style={styles.recordButton}>
-        <Text style={styles.recordButtonText}>Record</Text>
-      </TouchableOpacity>
-    )}
-  </View>
-);
-
-const LeaderboardItem: React.FC<{ item: LeaderboardItem }> = ({ item }) => (
-  <View style={styles.leaderboardItem}>
-    <View style={styles.rankContainer}>
-      <Text style={styles.rankNumber}>{item.rank}</Text>
-    </View>
-    <Image source={item.avatar} style={styles.leaderboardAvatar} />
-    <Text style={styles.leaderboardName}>{item.name}</Text>
-    <View style={styles.scoreContainer}>
-      <Text style={styles.starIcon}>⭐</Text>
-      <Text style={styles.scoreText}>{item.score}</Text>
     </View>
   </View>
 );
@@ -285,6 +233,45 @@ const ChallengesScreen: React.FC = () => {
     }
   };
 
+  const handleCompleteTask = (taskId: string) => {
+    console.log('Complete task:', taskId);
+    // Add your task completion logic here
+  };
+
+  const handleRecordPress = (taskId: string) => {
+    console.log('Record pressed for task:', taskId);
+    // Add your record functionality here
+  };
+
+  const renderTaskItem = ({ item }: { item: TaskItem }) => {
+    if (activeTab === 'Active') {
+      return (
+        <ActiveTaskItem
+          item={item}
+          theme={item.theme as 'green' | 'normal'}
+          onCompleteTask={handleCompleteTask}
+        />
+      );
+    } else if (activeTab === 'Completed') {
+      return (
+        <ReviewTaskItem
+          item={item}
+          type="completed"
+          theme={item.theme as 'default' | 'rejected'}
+        />
+      );
+    } else if (activeTab === 'In Review') {
+      return (
+        <ReviewTaskItem
+          item={item}
+          type="review"
+          theme={item.theme as 'default' | 'rejected'}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
@@ -307,7 +294,7 @@ const ChallengesScreen: React.FC = () => {
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              style={styles.topPerformanceList}
+              contentContainerStyle={styles.topPerformanceList}
             >
               {topPerformers.map((item) => (
                 <TopPerformanceItem key={item.id} item={item} />
@@ -319,7 +306,7 @@ const ChallengesScreen: React.FC = () => {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            style={styles.tabsContainer}
+            contentContainerStyle={styles.tabsContainer}
           >
             {tabs.map((tab) => (
               <TouchableOpacity
@@ -345,17 +332,12 @@ const ChallengesScreen: React.FC = () => {
             <Text style={styles.sectionTitle}>{getCurrentTitle()}</Text>
 
             {activeTab === 'Leader board' ? (
-              <FlatList
-                data={getCurrentData() as LeaderboardItem[]}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <LeaderboardItem item={item as LeaderboardItem} />}
-                scrollEnabled={false}
-              />
+              <Leaderboard data={getCurrentData() as LeaderboardItem[]} height={300} scrollEnabled={true} />
             ) : (
               <FlatList
                 data={getCurrentData() as TaskItem[]}
                 keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <TaskListItem item={item as TaskItem} status={activeTab} />}
+                renderItem={renderTaskItem}
                 scrollEnabled={false}
               />
             )}
@@ -370,7 +352,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.darkBackground,
-    paddingBottom: 80,
+    paddingBottom: 60,
   },
   scrollView: {
     flex: 1,
@@ -386,21 +368,19 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 32,
     paddingTop: 24,
     paddingHorizontal: 0,
-    minHeight: 600,
   },
   challengesTitle: {
     fontSize: 16,
-    fontWeight: 600,
+    fontWeight: '600',
     color: COLORS.textDark,
-    marginBottom: 14,
+    marginBottom: 12,
     paddingHorizontal: 20,
   },
 
   // Top Performance Styles
   topPerformanceContainer: {
-    marginBottom: 20,
+    marginBottom: 24,
     paddingHorizontal: 20,
-
   },
   topPerformanceHeader: {
     flexDirection: 'row',
@@ -419,12 +399,12 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   topPerformanceList: {
-    marginBottom: 10,
+    flex: 1,
+    gap: 28,
+    justifyContent: 'space-between',
   },
   topPerformanceItem: {
     alignItems: 'center',
-    marginRight: 15,
-    width: 80,
   },
   avatarContainer: {
     position: 'relative',
@@ -442,13 +422,12 @@ const styles = StyleSheet.create({
     height: 20,
   },
   performerName: {
-    marginTop: 8,
+    marginTop: 6,
     fontSize: 12,
     fontWeight: '500',
     color: COLORS.textDark,
     textAlign: 'center',
   },
-
   xpContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -456,227 +435,50 @@ const styles = StyleSheet.create({
 
   // Tabs Styles
   tabsContainer: {
-    marginBottom: 20,
-    backgroundColor: "#fef8e4",
+    marginBottom: 22,
+    backgroundColor: COLORS.tabsBackground,
     paddingHorizontal: 20,
     paddingVertical: 12,
   },
   tab: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 14,
     paddingVertical: 10,
     marginRight: 10,
     borderRadius: 20,
-    backgroundColor: '#F5F5F5',
   },
   activeTab: {
-    backgroundColor: '#FFB800',
+    backgroundColor: COLORS.yellow,
   },
   tabText: {
     fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
+    color: COLORS.textDark,
+    fontWeight: '400',
   },
   activeTabText: {
-    color: '#FFF',
-    fontWeight: '600',
+    color: COLORS.textWhite,
+    fontWeight: '500',
   },
 
   // Content Styles
   contentSection: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingBottom: 35,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 15,
-  },
-
-  // Task Item Styles
-  taskItem: {
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  taskHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  taskCategory: {
-    backgroundColor: '#E8F5E8',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  taskCategoryText: {
-    color: '#4CAF50',
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  todayBadge: {
-    backgroundColor: '#FF6B35',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  todayBadgeText: {
-    color: '#FFF',
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  completedBadge: {
-    backgroundColor: '#4CAF50',
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  completedBadgeText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  taskTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
-  },
-  taskDescription: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 12,
-  },
-  taskFooter: {
-    marginBottom: 8,
-  },
-  xpReward: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  },
-  xpText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  starContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 15,
+    color: COLORS.textDark,
+    marginBottom: 14,
   },
   starIcon: {
     width: 14,
     height: 14,
   },
   xpValue: {
-    fontSize: 12,
-    color: '#333',
-    fontWeight: '500',
-  },
-  dateText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  assignmentInfo: {
-    marginTop: 8,
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderTopColor: '#F0F0F0',
-  },
-  assignedText: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 4,
-  },
-  expireText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  completeButton: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginTop: 12,
-  },
-  completeButtonText: {
-    color: '#FFF',
-    textAlign: 'center',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  recordButton: {
-    backgroundColor: '#FF6B35',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginTop: 12,
-    alignSelf: 'flex-end',
-  },
-  recordButtonText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-
-  // Leaderboard Styles
-  leaderboardItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  rankContainer: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#F5F5F5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  rankNumber: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
-  },
-  leaderboardAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 12,
-  },
-  leaderboardName: {
-    flex: 1,
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '500',
-  },
-  scoreContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  scoreText: {
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '600',
-    marginLeft: 4,
+    fontSize: 10,
+    color: COLORS.yellow,
+    fontWeight: '400',
   },
 });
 
